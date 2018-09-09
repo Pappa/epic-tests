@@ -1,6 +1,6 @@
 import { loginSuccessAction, onSocketMessageAction } from './notifications.actions';
 import { notificationsEpic, asyncBoundariesEpic } from './notifications.epics';
-import { toArray } from 'rxjs/operators';
+import { toArray, tap } from 'rxjs/operators';
 import { asyncScheduler, of } from 'rxjs';
 
 describe('notificationsEpic', () => {
@@ -33,16 +33,14 @@ describe('Multiple actiions returned', () => {
         
         asyncBoundariesEpic(action$, {}, { fromWebSocket })
             .pipe(toArray())
-            .subscribe(
-                actions => {
-                    try {
-                        expect(actions).toEqual(expectedActions);
-                        done();
-                    } catch (e) {
-                        done.fail(e);
-                    }
+            .subscribe(actions => {
+                try {
+                    expect(actions).toEqual(expectedActions);
+                    done();
+                } catch (e) {
+                    done.fail(e);
                 }
-            )
+            })
     });
 
 });
