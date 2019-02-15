@@ -14,7 +14,7 @@ import {
 } from "rxjs/operators";
 import { of, timer } from "rxjs";
 
-export const autocompleteEpic = (action$, state$, {}) =>
+export const autocompleteEpic = (action$, state$) =>
   action$.pipe(
     ofType(AUTOCOMPLETE_START),
     debounce(_ => timer(100)),
@@ -26,8 +26,4 @@ export const autocompleteEpic = (action$, state$, {}) =>
     )
   );
 
-const fakeAjax = () =>
-  of("Trev").pipe(
-    tap(console.log.bind(null)),
-    delay(500)
-  );
+const fakeAjax = () => of("Trev").pipe(delay(500));
