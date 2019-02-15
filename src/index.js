@@ -6,10 +6,11 @@ import registerServiceWorker from "./registerServiceWorker";
 import { Provider } from "react-redux";
 import { compose, createStore, combineReducers, applyMiddleware } from "redux";
 import { createEpicMiddleware } from "redux-observable";
+import * as reducers from "./reducers";
 
 const composeMiddleware =
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const rootReducer = combineReducers({ reducer1: (x = {}) => x });
+const rootReducer = combineReducers(reducers);
 const epicMiddleware = createEpicMiddleware({});
 
 const store = createStore(
