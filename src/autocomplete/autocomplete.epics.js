@@ -10,11 +10,11 @@ import { of, timer } from "rxjs";
 export const autocompleteEpic = (action$, state$) =>
   action$.pipe(
     ofType(AUTOCOMPLETE_START),
-    debounce(_ => timer(100)),
+    debounce(_ => timer(1000)),
     switchMap(() =>
       fakeAjax().pipe(
-        map(autocompleteEndAction),
-        takeUntil(action$.pipe(ofType(AUTOCOMPLETE_CANCEL)))
+        takeUntil(action$.pipe(ofType(AUTOCOMPLETE_CANCEL))),
+        map(autocompleteEndAction)
       )
     )
   );
