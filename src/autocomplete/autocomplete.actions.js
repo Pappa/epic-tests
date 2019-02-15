@@ -6,9 +6,8 @@ export const autocompleteStartAction = () => ({
   type: AUTOCOMPLETE_START
 });
 
-export const autocompleteEndAction = term => ({
-  type: AUTOCOMPLETE_END,
-  payload: term
+export const autocompleteEndAction = () => ({
+  type: AUTOCOMPLETE_END
 });
 
 export const autocompleteCancelAction = () => ({

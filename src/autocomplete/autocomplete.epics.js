@@ -4,14 +4,7 @@ import {
   autocompleteEndAction
 } from "./autocomplete.actions";
 import { ofType } from "redux-observable";
-import {
-  switchMap,
-  map,
-  tap,
-  takeUntil,
-  delay,
-  debounce
-} from "rxjs/operators";
+import { switchMap, map, takeUntil, delay, debounce } from "rxjs/operators";
 import { of, timer } from "rxjs";
 
 export const autocompleteEpic = (action$, state$) =>
@@ -20,10 +13,10 @@ export const autocompleteEpic = (action$, state$) =>
     debounce(_ => timer(100)),
     switchMap(() =>
       fakeAjax().pipe(
-        map(response => autocompleteEndAction(response)),
+        map(autocompleteEndAction),
         takeUntil(action$.pipe(ofType(AUTOCOMPLETE_CANCEL)))
       )
     )
   );
 
-const fakeAjax = () => of("Trev").pipe(delay(500));
+const fakeAjax = () => of(1).pipe(delay(500));
