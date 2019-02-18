@@ -38,7 +38,7 @@ import { of, iif, timer, interval, merge, EMPTY, race } from "rxjs";
 //   );
 
 export const autocompleteEpic = action$ => {
-  const requestAction$ = action$.pipe(
+  const start$ = action$.pipe(
     ofType(AUTOCOMPLETE_START),
     share()
   );
@@ -47,7 +47,7 @@ export const autocompleteEpic = action$ => {
       ofType(AUTOCOMPLETE_CANCEL),
       mapTo(false)
     ),
-    requestAction$.pipe(mapTo(true))
+    start$.pipe(mapTo(true))
   ).pipe(
     debounceTime(500),
     distinctUntilChanged(),
