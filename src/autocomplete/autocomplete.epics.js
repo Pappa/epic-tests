@@ -21,8 +21,7 @@ import {
   retry,
   filter
 } from "rxjs/operators";
-import { of, iif, timer, interval, merge, EMPTY,
-  race } from "rxjs";
+import { of, iif, timer, interval, merge, EMPTY, race } from "rxjs";
 
 // https://stackoverflow.com/questions/45513629/debouncing-and-cancelling-with-redux-observable
 
@@ -38,57 +37,11 @@ import { of, iif, timer, interval, merge, EMPTY,
 //     )
 //   );
 
-// export const autocompleteEpic2 = (action$, state$) => {
-//   return merge(
-//     action$.pipe(
-//       ofType(AUTOCOMPLETE_START),
-//       debounceTime(1000),
-//       mapTo(true)
-//     ),
-//     action$.pipe(
-//       ofType(AUTOCOMPLETE_CANCEL),
-//       mapTo(false)
-//     )
-//   ).pipe(
-//     tap(console.log.bind(null)),
-//     switchMap(x => x ? of({ type: x, payload: x }) : EMPTY)
-//   );
-// };
-
-// export const autocompleteEpic3 = (action$, state$) => {
-//   const requestAction$ = action$.pipe(
-//     ofType(AUTOCOMPLETE_START),
-//     share()
-//   );
-//   return merge(
-//     action$.pipe(
-//       ofType(AUTOCOMPLETE_CANCEL),
-//       mapTo(false)
-//     ),
-//     requestAction$.pipe(mapTo(true))
-//   ).pipe(
-//     distinctUntilChanged(),
-//     iif(
-//       condition => condition,
-//       requestAction$.pipe(
-//         debounceTime(250),
-//         switchMap(() =>
-//           fakeAjax().pipe(
-//             takeUntil(action$.pipe(ofType(AUTOCOMPLETE_CANCEL))),
-//             map(autocompleteEndAction)
-//           )
-//         ),
-//         EMPTY
-//       )
-//     )
-//   );
-// };
-
-export const autocompleteEpic4 = action$ => {
+export const autocompleteEpic = action$ => {
   const requestAction$ = action$.pipe(
     ofType(AUTOCOMPLETE_START),
     share()
-  )
+  );
   return merge(
     action$.pipe(
       ofType(AUTOCOMPLETE_CANCEL),
@@ -96,15 +49,16 @@ export const autocompleteEpic4 = action$ => {
     ),
     requestAction$.pipe(mapTo(true))
   ).pipe(
+    debounceTime(500),
     distinctUntilChanged(),
     filter(x => x),
-    switchMap(() => 
+    switchMap(() =>
       fakeAjax().pipe(
         takeUntil(action$.pipe(ofType(AUTOCOMPLETE_CANCEL))),
         map(autocompleteEndAction)
       )
     )
-  )
+  );
 };
 
 const fakeAjax = () => of(1).pipe(delay(500));
